@@ -128,9 +128,11 @@ if (!$reportView) {
 
     // query visitor data to database
     $_visitor_q = $dbs->query("SELECT SUBSTRING(`checkin_date`, 9, 2) AS `mdate`, COUNT(visitor_id) AS `vtotal` FROM `visitor_count` WHERE `checkin_date` LIKE '$selected_year-$selected_month%' GROUP BY DATE(`checkin_date`)");
-    while ($_visitor_d = $_visitor_q->fetch_row()) {
-        $date = (integer)preg_replace('@^0+@i', '',$_visitor_d[0]);
-        $visitor_data[$date] = '<div class="data">'.($_visitor_d[1]?$_visitor_d[1]:'0').'</div>';
+    if($_visitor_d->num_rows){
+        while ($_visitor_d = $_visitor_q->fetch_row()) {
+            $date = (integer)preg_replace('@^0+@i', '',$_visitor_d[0]);
+            $visitor_data[$date] = '<div class="data">'.($_visitor_d[1]?$_visitor_d[1]:'0').'</div>';
+        }
     }
 
     // generate calendar
